@@ -1,0 +1,9 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Welcome to our e-commerce app</h1>
+<p>My name is {{name}}</p>
+<ul>
+  {% for p in products %}
+  <li>{{p}}</li>
+  {% endfor %}
+</ul>
+{% endblock content %}
