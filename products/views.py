@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.http import JsonResponse
 from .models import Product
 
 from .forms import ProdutForm
@@ -39,3 +39,13 @@ def show(request, pid):
     p = Product.objects.get(id=pid)
 
     return render(request, 'product/detail.html', {'p': p})
+
+
+def getAllProducts(request):
+    # QuerySet object is not serializable
+    products_query_set = Product.objects.all()
+    products = [
+        {'id': p.id, 'title': p.title, 'description': p.description, 'price': p.price}
+        for p in products_query_set
+    ]
+    return JsonResponse(products, safe=False)
