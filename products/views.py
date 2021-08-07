@@ -49,3 +49,29 @@ def getAllProducts(request):
         for p in products_query_set
     ]
     return JsonResponse(products, safe=False)
+
+
+def getProductById(request, pid):
+    try:
+        db_product = Product.objects.get(id=pid)
+
+        product = {
+            'id': pid,
+            'title': db_product.title,
+            'description': db_product.description,
+            'price': db_product.price
+        }
+        return JsonResponse(product)
+    except Product.DoesNotExist:
+        return JsonResponse({'result': 'product not found'})
+
+
+def deleteById(request, pid):
+    try:
+        db_product = Product.objects.get(id=pid)
+        db_product.delete()
+        return JsonResponse({'status': 'ok'})
+    except Product.DoesNotExist:
+        return JsonResponse({'result': 'product not found'})
+    except Exception:
+        return JsonResponse({'result': 'Internal exception'})
