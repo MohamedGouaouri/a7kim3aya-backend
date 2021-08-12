@@ -3,15 +3,10 @@ from django.db import models
 # Create your models here.
 
 
-class Blog(models.Model):
-    name = models.CharField(max_length=100)
-    tagline = models.TextField()
+class Blogger(models.Model):
+    class Meta:
+        db_table = "blogger"
 
-    def __str__(self) -> str:
-        return self.name
-
-
-class Author(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField()
 
@@ -19,17 +14,14 @@ class Author(models.Model):
         return self.name
 
 
-class Entry(models.Model):
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+class Blog(models.Model):
+    class Meta:
+        db_table = "blog"
 
-    headline = models.CharField(max_length=255)
-    body_text = models.TextField()
-    pub_date = models.DateField()
-    mod_date = models.DateField()
-    authors = models.ManyToManyField(Author)
-    number_of_comments = models.IntegerField()
-    number_of_pingbacks = models.IntegerField()
-    rating = models.IntegerField()
+    name = models.CharField(max_length=100)
+    body = models.TextField()
+    tagline = models.TextField()
+    blogger = models.ForeignKey(Blogger, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
