@@ -1,7 +1,10 @@
 from django.shortcuts import render
 
 from .models import Blog, Blogger
-# Create your views here.
+
+
+from rest_framework import viewsets
+from .serializers import BloggerSerializer, BlogSerializer
 
 
 def raw_sql():
@@ -11,3 +14,13 @@ def raw_sql():
     if len(blogs) > 0:
         return blogs
     return None
+
+
+class BloggerViewSet(viewsets.ModelViewSet):
+    queryset = Blogger.objects.all()
+    serializer_class = BloggerSerializer
+
+
+class BlogViewSet(viewsets.ModelViewSet):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
