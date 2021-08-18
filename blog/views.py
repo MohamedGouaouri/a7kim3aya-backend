@@ -1,5 +1,6 @@
 from django.shortcuts import render
-
+from django.http import JsonResponse
+from django.db import transaction
 from .models import Blog, Blogger
 
 
@@ -14,6 +15,17 @@ def raw_sql():
     if len(blogs) > 0:
         return blogs
     return None
+
+
+transaction.on_commit(lambda: print("commited changes"))
+
+
+@transaction.atomic
+def atomic_create_blogger(request):
+    blogger = Blogger(name="mohamed", email="mohamedG@mit.edu", age=21)
+    blogger.save()
+    #a = 1 / 0
+    return JsonResponse(blogger.to_json_format(), safe=False)
 
 
 class BloggerViewSet(viewsets.ModelViewSet):
