@@ -93,7 +93,7 @@ class MyHttpResponse(http.HttpResponse):
 # resolve_url method is responsible for converting path unique name to path url
 
 
-async def http_view(request: http.HttpRequest):
+def http_view(request: http.HttpRequest):
     # r = await MyHttpResponse("async content")
-    print(r)
+    r = None
     return r or http.HttpResponse("no waiting")
