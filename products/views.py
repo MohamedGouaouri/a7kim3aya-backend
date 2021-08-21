@@ -1,6 +1,10 @@
-from django.shortcuts import render
+from datetime import time
+import django
+from django.shortcuts import render, redirect, resolve_url
 from django.http import JsonResponse
+from django import http
 from .models import Product
+import time
 
 from .forms import ProdutForm
 
@@ -75,3 +79,21 @@ def deleteById(request, pid):
         return JsonResponse({'result': 'product not found'})
     except Exception:
         return JsonResponse({'result': 'Internal exception'})
+
+
+def re_view(request):
+    return JsonResponse({'status': 200}, safe=False)
+
+
+class MyHttpResponse(http.HttpResponse):
+    def __init__(self, content: object, *args, **kwargs) -> None:
+        super().__init__(content=content, *args, **kwargs)
+        # time.sleep(3)
+
+# resolve_url method is responsible for converting path unique name to path url
+
+
+async def http_view(request: http.HttpRequest):
+    # r = await MyHttpResponse("async content")
+    print(r)
+    return r or http.HttpResponse("no waiting")
