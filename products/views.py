@@ -1,12 +1,13 @@
 from datetime import time
 import django
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect, resolve_url
 from django.http import JsonResponse
 from django import http
 from .models import Product
-import time
+from django.views.generic import View, TemplateView
 
-from .forms import ProdutForm
+from .forms import ProdutForm, UploadFileForm
 
 
 def home(request):
@@ -97,3 +98,29 @@ def http_view(request: http.HttpRequest):
     # r = await MyHttpResponse("async content")
     r = None
     return r or http.HttpResponse("no waiting")
+
+
+def upload(request: http.HttpRequest):
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            print(request.FILE)
+            return http.HttpResponse("Valid form")
+    else:
+        form = UploadFileForm()
+
+    return render(request, 'upload.html', {'form': form})
+
+
+# Class based views
+class AllProductsView(View):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+        print(dir(self))
+
+    def get(self, request, *args, **kwargs):
+        print(args, kwargs)
+        return JsonResponse({'status': 'ok'})
+
+    def post(self, *args, **kwargs):
+        return JsonResponse({'status': 'ok'})

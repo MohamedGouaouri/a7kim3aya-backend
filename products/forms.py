@@ -10,3 +10,8 @@ class ProdutForm(forms.ModelForm):
         fields = [
             'title', 'price', 'description'
         ]
+
+
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    f = forms.FileField()

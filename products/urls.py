@@ -10,6 +10,8 @@ urlpatterns = [
     path('show/<int:pid>/', getProductById, name='show-by-id'),
     path("delete/<int:pid>/", deleteById),
     path("http/", http_view),
+    path("upload/", upload),
+    path("all/", AllProductsView.as_view()),
     re_path(r"^\d\w+py$", re_view)
 
 ]

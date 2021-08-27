@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'products', 'blog', 'rest_framework'
+    'products', 'blog', 'rest_framework', 'channels',
 ]
 
 MIDDLEWARE = [
@@ -68,8 +68,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'freecodecamp.wsgi.application'
-
+#WSGI_APPLICATION = 'freecodecamp.wsgi.application'
+ASGI_APPLICATION = "freecodecamp.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
