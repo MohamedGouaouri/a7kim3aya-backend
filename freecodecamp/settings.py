@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'products', 'blog', 'rest_framework', 'channels',
+    'products', 'blog', 'rest_framework',  'channels',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'freecodecamp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['products/templates'],
+        'DIRS': ['products/templates', 'chat/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,9 +68,16 @@ TEMPLATES = [
     },
 ]
 
-#WSGI_APPLICATION = 'freecodecamp.wsgi.application'
+WSGI_APPLICATION = 'freecodecamp.wsgi.application'
 ASGI_APPLICATION = "freecodecamp.asgi.application"
-
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)]
+        }
+    }
+}
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 

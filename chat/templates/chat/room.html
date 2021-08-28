@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
+      rel="stylesheet"
+    />
+    <title>Chat</title>
+  </head>
+  <body style="font-family: 'Quicksand', sans-serif">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-12 m-5" style="background-color: aqua">
+          <h1 class="">Hello {{ username }}</h1>
+          <h2>Chat Room: {{ room_code }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row m-2">
+        <div class="col dflex flex-column">
+          <!-- Messages -->
+          <label for="chat-box">Chat History</label>
+          <div class="shadow-sm p-3 mb-5 bg-white rounded" id="chat-box"></div>
+        </div>
+      </div>
+      <div class="row m-2">
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Message"
+            aria-label="Message"
+            id="message"
+          />
+        </div>
+      </div>
+      <div class="row m-2">
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary" id="send-btn">
+            send
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+    crossorigin="anonymous"
+  ></script>
+  <script>
+    document.getElementById("message").focus();
+
+    var chatBox = document.getElementById("chat-box");
+    var username = "{{username}}";
+    var roomCode = "{{room_code}}";
+    var messageInput = document.getElementById("message");
+
+    // work with websockets
+    var endpoint = "ws://" + window.location.host + "/ws/" + roomCode + "/";
+
+    var chatSocket = new WebSocket(endpoint);
+    chatSocket.onopen = function (e) {
+      console.log("connected to" + endpoint);
+    };
+    chatSocket.onclose = function (e) {
+      console.log("socket closed");
+    };
+    chatSocket.onerror = function (e) {
+      console.log("socket error");
+    };
+
+    chatSocket.onmessage = function (e) {
+      // get data from server
+      var data = JSON.parse(e.data);
+      if (data.message) {
+        var messageDiv = document.createElement("div");
+        messageDiv.innerHTML =
+          "<b>" + data.username + "</b>" + ": " + data.message;
+        chatBox.appendChild(messageDiv);
+        messageInput.value = "";
+      }
+    };
+
+    document.getElementById("send-btn").onclick = function (e) {
+      var message = document.getElementById("message").value;
+
+      // send data to server
+      chatSocket.send(
+        JSON.stringify({
+          message: message,
+          username: username,
+          room: roomCode,
+        })
+      );
+    };
+    const ENTER = 13;
+    document.getElementById("send-btn").onkeyup = function (e) {
+      if (e.keyCode == ENTER) {
+        document.getElementById("send-btn").click();
+      }
+    };
+  </script>
+</html>
