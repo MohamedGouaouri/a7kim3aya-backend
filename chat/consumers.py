@@ -12,49 +12,38 @@ import json
 class ChatConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print("Consumer connected")
 
     async def connect(self):
 
-        self.room_code = self.scope['url_route']['kwargs']['room_code']
-        self.room_group_code = f'chat_{self.room_code}'
+        print("Consumer connected")
+        self.peer_code = self.scope['url_route']['kwargs']['peer_code']
+        self.peer_group_code = f'chat_{self.peer_code}'
 
         # join room
         await self.channel_layer.group_add(
-            self.room_group_code,
+            self.peer_group_code,
             self.channel_name
         )
         await self.accept()
 
     async def disconnect(self, code):
+        print("Consumer disconnected")
         await self.channel_layer.group_discard(
-            self.room_group_code,
+            self.peer_group_code,
             self.channel_name
         )
 
     async def receive(self, text_data):
-        data = json.loads(text_data)
-        message = data['message']
-        username = data['username']
-        room = data['room']
+        message = json.loads(text_data.strip())
+        print(text_data.strip())
         await self.channel_layer.group_send(
-            self.room_group_code,
+            self.peer_group_code,
             {
                 'type': 'chat_message',
                 'message': message,
-                'username': username
             }
         )
-        # self.send(text_data=json.dumps({
-        #     'message': message,
-        #     'username': username
-        # }))
-        print(data)
 
     async def chat_message(self, event):
         message = event['message']
-        username = event['username']
-        await self.send(text_data=json.dumps({
-            'message': message,
-            'username': username
-        }))
+        await self.send(text_data=json.dumps(message))

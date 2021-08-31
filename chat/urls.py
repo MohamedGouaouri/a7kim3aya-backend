@@ -3,5 +3,6 @@ from .views import *
 
 urlpatterns = [
     path("", index, name='index'),
-    path("<str:room_code>/", room)
+    path("room/<str:room_code>/", room),
+    path("auth/login/", auth)
 ]
