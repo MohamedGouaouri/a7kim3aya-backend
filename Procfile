@@ -1,2 +1,1 @@
-web: gunicorn freecodecamp.wsgi
-ws: gunicorn freecodecamp.asgi:application -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
+web: daphne freecodecamp.asgi:channel_layer --bind 0.0.0.0:8000
