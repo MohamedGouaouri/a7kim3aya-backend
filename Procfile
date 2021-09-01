@@ -1,1 +1,1 @@
-web: daphne freecodecamp.asgi:application --bind 0.0.0.0:8000
+web: daphne freecodecamp.asgi:application
