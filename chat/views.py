@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from .models import UserResource
+from .helpers import allow_cors_headers
 # Create your views here.
 
 
@@ -23,8 +24,35 @@ def auth(request):
     if user:
 
         user_resources = UserResource.objects.filter(user_id=user).first()
-        return JsonResponse({'loged_in': True,
-                             'user': {'id': user.pk, 'name': user.get_username()},
-                             'imageUrl': user_resources.imageUrl})
+        response = JsonResponse({'loged_in': True,
+                                 'user': {'id': user.pk, 'name': user.get_username()},
+                                 'imageUrl': user_resources.imageUrl})
+        response = allow_cors_headers(response)
+        return response
     else:
-        return JsonResponse({'loged_in': False})
+        response = JsonResponse({'loged_in': False})
+        response = allow_cors_headers(response)
+        return response
+
+
+def logout(request):
+    # TODO Implement userlogout functionality
+    pass
+
+
+def get_all_users(request):
+    usersdb = User.objects.all()
+    users = []
+    for userdb in usersdb:
+
+        user_resources = UserResource.objects.filter(user_id=userdb).first()
+        users.append({
+            'id': userdb.pk,
+            'name': userdb.username,
+            'imageUrl': user_resources.imageUrl,
+            'isOnline': userdb.is_authenticated
+        })
+
+    response = JsonResponse(users, safe=False)
+    response = allow_cors_headers(response)
+    return response
