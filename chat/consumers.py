@@ -17,7 +17,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         print("Consumer connected")
         self.room_code = self.scope['url_route']['kwargs']['room_code']
-        self.room_group_code = f'chat_{self.peer_code}'
+        self.room_group_code = f'chat_{self.room_code}'
 
         # join room
         await self.channel_layer.group_add(

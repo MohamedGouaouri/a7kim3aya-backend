@@ -19,7 +19,7 @@ import chat.routing
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'freecodecamp.settings')
 
 application = ProtocolTypeRouter({
-    'http': get_asgi_application(),
+    'http': get_wsgi_application(),
     'websocket': AuthMiddlewareStack(
         URLRouter(
             chat.routing.websockets_urlpatterns
