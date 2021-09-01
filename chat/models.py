@@ -6,3 +6,4 @@ from django.contrib.auth import get_user_model
 class UserResource(models.Model):
     user_id = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     imageUrl = models.CharField(max_length=255)
+    roomPartialCode = models.IntegerField(unique=True, default=0)

@@ -17,6 +17,11 @@ def room(request, room_code):
     return render(request, 'chat/room.html', {'room_code': room_code, 'username': username})
 
 
+def register(request):
+    # TODO: Implemenet user registration
+    pass
+
+
 def auth(request):
     username = request.GET['username']
     password = request.GET['password']
@@ -26,11 +31,13 @@ def auth(request):
         user_resources = UserResource.objects.filter(user_id=user).first()
         response = JsonResponse({'loged_in': True,
                                  'user': {'id': user.pk, 'name': user.get_username()},
-                                 'imageUrl': user_resources.imageUrl})
+                                 'imageUrl': user_resources.imageUrl,
+                                 'roomPartialCode': user_resources.roomPartialCode
+                                 }, safe=False)
         response = allow_cors_headers(response)
         return response
     else:
-        response = JsonResponse({'loged_in': False})
+        response = JsonResponse({'loged_in': False}, safe=False)
         response = allow_cors_headers(response)
         return response
 
@@ -50,7 +57,8 @@ def get_all_users(request):
             'id': userdb.pk,
             'name': userdb.username,
             'imageUrl': user_resources.imageUrl,
-            'isOnline': userdb.is_authenticated
+            'isOnline': userdb.is_authenticated,
+            'roomPartialCode': user_resources.roomPartialCode
         })
 
     response = JsonResponse(users, safe=False)

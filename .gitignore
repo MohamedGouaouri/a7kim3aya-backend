@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 products/migrations/
 blog/migrations/
+static
