@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from .models import UserResource
 from .helpers import allow_cors_headers
+from asgiref.sync import sync_to_async
 # Create your views here.
 
 
@@ -22,6 +23,7 @@ def register(request):
     pass
 
 
+@sync_to_async
 def auth(request):
     username = request.GET['username']
     password = request.GET['password']
@@ -42,11 +44,13 @@ def auth(request):
         return response
 
 
+@sync_to_async
 def logout(request):
     # TODO Implement userlogout functionality
     pass
 
 
+@sync_to_async
 def get_all_users(request):
     usersdb = User.objects.all()
     users = []
