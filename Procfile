@@ -1,2 +1,2 @@
 web: gunicorn freecodecamp.wsgi
-web: daphne freecodecamp.asgi:application
+websocket: daphne freecodecamp.asgi:application
