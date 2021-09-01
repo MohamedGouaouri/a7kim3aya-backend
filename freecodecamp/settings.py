@@ -1,3 +1,4 @@
+import django_heroku
 """
 Django settings for freecodecamp project.
 
@@ -36,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    # 'django.contrib.staticfiles',
     'products', 'blog', 'rest_framework',  'channels', 'chat'
 ]
 
@@ -135,4 +136,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_HOSTS = "*"
 
 
-STATIC_URL = '/static/'
+django_heroku.settings(locals())
