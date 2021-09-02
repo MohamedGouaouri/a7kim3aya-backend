@@ -1,4 +1,4 @@
-import django_heroku
+
 """
 Django settings for freecodecamp project.
 
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'freecodecamp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['products/templates', 'chat/templates'],
+        'DIRS': ['chat/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,7 +75,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('2.tcp.ngrok.io', 10580)]
+            'hosts': [('127.0.0.1', 6379)]
         }
     }
 }
@@ -134,6 +134,3 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ALLOWED_HOSTS = "*"
-
-
-django_heroku.settings(locals())

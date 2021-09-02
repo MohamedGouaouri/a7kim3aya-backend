@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from django.http import JsonResponse
-from .models import UserResource
+from django.http import JsonResponse, HttpRequest, response
+from .models import Message, UserResource
 from .helpers import allow_cors_headers
 from asgiref.sync import sync_to_async
 # Create your views here.
@@ -66,5 +66,27 @@ def get_all_users(request):
         })
 
     response = JsonResponse(users, safe=False)
+    response = allow_cors_headers(response)
+    return response
+
+
+@sync_to_async
+def get_chat_history(request: HttpRequest):
+    messages_from = request.GET['from']
+    messages_to = request.GET['to']
+    print(messages_from, messages_to)
+    chat_historydb = Message.objects.filter(
+        message_from=messages_from, message_to=messages_to)
+
+    chat_history = []
+    for message in chat_historydb:
+        chat_history.append({
+            'id': message.id,
+            'sender': {'id': message.message_from.id},
+            'receiver': {'id': message.message_to.id},
+            'text': message.content,
+            'time': message.at
+        })
+    response = JsonResponse(chat_history, safe=False)
     response = allow_cors_headers(response)
     return response
