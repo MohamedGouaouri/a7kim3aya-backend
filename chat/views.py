@@ -5,6 +5,7 @@ from django.http import JsonResponse, HttpRequest, response
 from .models import Message, UserResource
 from .helpers import allow_cors_headers
 from asgiref.sync import sync_to_async
+from django.db.models import Q
 # Create your views here.
 
 
@@ -74,9 +75,8 @@ def get_all_users(request):
 def get_chat_history(request: HttpRequest):
     messages_from = request.GET['from']
     messages_to = request.GET['to']
-    print(messages_from, messages_to)
     chat_historydb = Message.objects.filter(
-        message_from=messages_from, message_to=messages_to).order_by('at')
+        Q(message_from=messages_from, message_to=messages_to) | Q(message_from=messages_to, message_to=messages_from)).order_by('-at')
 
     chat_history = []
     for message in chat_historydb:
