@@ -76,7 +76,7 @@ def get_chat_history(request: HttpRequest):
     messages_to = request.GET['to']
     print(messages_from, messages_to)
     chat_historydb = Message.objects.filter(
-        message_from=messages_from, message_to=messages_to).order_by('-at')
+        message_from=messages_from, message_to=messages_to).order_by('at')
 
     chat_history = []
     for message in chat_historydb:
