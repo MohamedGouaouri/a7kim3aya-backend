@@ -1,9 +1,11 @@
-from chat.models import Message
-from channels.generic.websocket import AsyncWebsocketConsumer
-from asgiref.sync import sync_to_async
-import json
-
+import django
+django.setup()
 from django.contrib.auth.models import User
+import json
+from asgiref.sync import sync_to_async
+from channels.generic.websocket import AsyncWebsocketConsumer
+from chat.models import Message
+
 
 
 # A consumer simply does the following :

@@ -1,17 +1,11 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
-from django.db.models import constraints
-
-from django.db.models.constraints import CheckConstraint
-from django.db.models import F
-from django.db.models.query_utils import Q
-
-# Create your models here.
-
 
 # This class is used to create the database table for the ChatUser model
 # It inherits from the django.db.models.Model class
+
+
 class UserResource(models.Model):
     user_id = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     imageUrl = models.CharField(max_length=255)
