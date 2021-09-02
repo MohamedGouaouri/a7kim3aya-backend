@@ -3,7 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 import json
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 
 # A consumer simply does the following :
@@ -56,7 +56,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message_from_id = sender['id']
         message_to_id = receiver['id']
         print(message_from_id, message_to_id)
-        User = get_user_model()
         try:
             message_from = await sync_to_async(
                 User.objects.get, thread_sensitive=True)(id=message_from_id)
