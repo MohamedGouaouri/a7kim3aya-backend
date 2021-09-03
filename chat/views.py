@@ -76,7 +76,7 @@ def get_chat_history(request: HttpRequest):
                 'text': message.content,
                 'time': message.at
             })
-        else:
+        if message.message_from.id == second_point:
             chat_history.append({
                 'id': message.id,
                 'sender': {'id': second_point},
