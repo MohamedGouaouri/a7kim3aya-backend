@@ -75,7 +75,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('8.tcp.ngrok.io', 15859)]
+            'hosts': [('4.tcp.ngrok.io', 18139)]
         }
     }
 }
