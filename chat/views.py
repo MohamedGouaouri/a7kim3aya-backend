@@ -71,16 +71,16 @@ def get_chat_history(request: HttpRequest):
         if message.message_from.id == messages_from:
             chat_history.append({
                 'id': message.id,
-                'sender': {'id': message.message_from.id},
-                'receiver': {'id': message.message_to.id},
+                'sender': {'id': messages_from},
+                'receiver': {'id': messages_to},
                 'text': message.content,
                 'time': message.at
             })
         else:
             chat_history.append({
                 'id': message.id,
-                'sender': {'id': message.message_to.id},
-                'receiver': {'id': message.message_from.id},
+                'sender': {'id': messages_to},
+                'receiver': {'id': messages_from},
                 'text': message.content,
                 'time': message.at
             })
