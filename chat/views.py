@@ -77,13 +77,14 @@ def get_chat_history(request: HttpRequest):
                 'time': message.at
             })
         else:
-            chat_history.append({
-                'id': message.id,
-                'sender': {'id': messages_to},
-                'receiver': {'id': messages_from},
-                'text': message.content,
-                'time': message.at
-            })
+            if message.message_from.id == messages_to:
+                chat_history.append({
+                    'id': message.id,
+                    'sender': {'id': messages_to},
+                    'receiver': {'id': messages_from},
+                    'text': message.content,
+                    'time': message.at
+                })
     response = JsonResponse(chat_history, safe=False)
     response = allow_cors_headers(response)
     return response
