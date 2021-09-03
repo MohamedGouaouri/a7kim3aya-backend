@@ -1,22 +1,10 @@
-from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from django.http import JsonResponse, HttpRequest, response
+from django.http import JsonResponse, HttpRequest
+from asgiref.sync import sync_to_async
 from .models import Message, UserResource
 from .helpers import allow_cors_headers
-from asgiref.sync import sync_to_async
 from django.db.models import Q
-# Create your views here.
-
-
-def index(request):
-    return render(request, 'chat/index.html', {})
-
-
-def room(request, room_code):
-    username = request.GET['username']
-    # print(username)
-    return render(request, 'chat/room.html', {'room_code': room_code, 'username': username})
 
 
 def register(request):
@@ -30,7 +18,6 @@ def auth(request):
     password = request.GET['password']
     user = authenticate(username=username, password=password)
     if user:
-
         user_resources = UserResource.objects.filter(user_id=user).first()
         response = JsonResponse({'loged_in': True,
                                  'user': {'id': user.pk, 'name': user.get_username()},
@@ -53,6 +40,7 @@ def logout(request):
 
 @sync_to_async
 def get_all_users(request):
+    print(request.user.is_authenticated)
     usersdb = User.objects.all()
     users = []
     for userdb in usersdb:
