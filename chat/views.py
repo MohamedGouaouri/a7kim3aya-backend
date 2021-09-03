@@ -61,30 +61,29 @@ def get_all_users(request):
 
 @sync_to_async
 def get_chat_history(request: HttpRequest):
-    messages_from = request.GET['from']
-    messages_to = request.GET['to']
+    first_point = request.GET['from']
+    second_point = request.GET['to']
     chat_historydb = Message.objects.filter(
-        Q(message_from=messages_from, message_to=messages_to) | Q(message_from=messages_to, message_to=messages_from)).order_by('-at')
+        Q(message_from=first_point, message_to=second_point) | Q(message_from=second_point, message_to=first_point)).order_by('-at')
 
     chat_history = []
     for message in chat_historydb:
-        if message.message_from.id == messages_from:
+        if message.message_from.id == first_point:
             chat_history.append({
                 'id': message.id,
-                'sender': {'id': messages_from},
-                'receiver': {'id': messages_to},
+                'sender': {'id': first_point},
+                'receiver': {'id': second_point},
                 'text': message.content,
                 'time': message.at
             })
         else:
-            if message.message_from.id == messages_to:
-                chat_history.append({
-                    'id': message.id,
-                    'sender': {'id': messages_to},
-                    'receiver': {'id': messages_from},
-                    'text': message.content,
-                    'time': message.at
-                })
+            chat_history.append({
+                'id': message.id,
+                'sender': {'id': second_point},
+                'receiver': {'id': first_point},
+                'text': message.content,
+                'time': message.at
+            })
     response = JsonResponse(chat_history, safe=False)
     response = allow_cors_headers(response)
     return response
