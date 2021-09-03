@@ -1,3 +1,4 @@
+import json
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.http import JsonResponse, HttpRequest
@@ -5,6 +6,7 @@ from asgiref.sync import sync_to_async
 from .models import Message, UserResource
 from .helpers import allow_cors_headers
 from django.db.models import Q
+from django.core import serializers
 
 
 def register(request):
@@ -68,22 +70,14 @@ def get_chat_history(request: HttpRequest):
 
     chat_history = []
     for message in chat_historydb:
-        if message.message_from.id == first_point:
-            chat_history.append({
-                'id': message.id,
-                'sender': {'id': first_point},
-                'receiver': {'id': second_point},
-                'text': message.content,
-                'time': message.at
-            })
-        if message.message_from.id == second_point:
-            chat_history.append({
-                'id': message.id,
-                'sender': {'id': second_point},
-                'receiver': {'id': first_point},
-                'text': message.content,
-                'time': message.at
-            })
+        chat_history.append({
+            'id': message.id,
+            'message_from': {'id': message.message_from_id},
+            'message_to': {'id': message.message_to_id},
+            'content': message.content,
+            'time': message.at
+        })
+
     response = JsonResponse(chat_history, safe=False)
     response = allow_cors_headers(response)
     return response
