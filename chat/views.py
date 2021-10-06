@@ -1,6 +1,6 @@
 import json
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse, HttpRequest
 from asgiref.sync import sync_to_async
 from .models import Message, UserResource
@@ -21,6 +21,8 @@ def auth(request):
     user = authenticate(username=username, password=password)
     if user:
         user_resources = UserResource.objects.filter(user_id=user).first()
+        login(request, user)
+        print(user.is_authenticated)
         response = JsonResponse({'loged_in': True,
                                  'user': {'id': user.pk, 'name': user.get_username()},
                                  'imageUrl': user_resources.imageUrl,
