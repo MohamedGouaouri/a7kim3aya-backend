@@ -1,5 +1,7 @@
 import django_heroku
+
 import os
+
 """
 Django settings for a7kim3aya project.
 
